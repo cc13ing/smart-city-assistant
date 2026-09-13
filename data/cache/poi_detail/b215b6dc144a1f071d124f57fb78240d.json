@@ -1,9 +1,0 @@
-{
-  "saved_at": 1780264226.2218428,
-  "ttl": 86400,
-  "data": {
-    "type": "poi_detail",
-    "name": "测试POI",
-    "address": "测试地址"
-  }
-}

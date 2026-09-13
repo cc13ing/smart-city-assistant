@@ -25,12 +25,10 @@ ENV/
 .coverage
 htmlcov/
 
-# ===== 本地数据（敏感/运行时产生）=====
+# ===== 本地数据（敏感/运行时产生 — 全部屏蔽 JSON/SQLite）=====
 data/checkpoints.db
 data/checkpoints.db-*
-data/profiles/*.json
-data/sessions/*.json
-data/shares/*.json
+data/**/*.json
 
 # ===== 日志/临时 =====
 *.log
