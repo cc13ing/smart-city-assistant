@@ -1,0 +1,45 @@
+# ===== 环境与密钥 =====
+.env
+.env.local
+.env.*
+
+# ===== Python 缓存/字节码 =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# ===== 虚拟环境 =====
+.venv/
+venv/
+ENV/
+
+# ===== 工具缓存 =====
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ===== 本地数据（敏感/运行时产生）=====
+data/checkpoints.db
+data/checkpoints.db-*
+data/profiles/*.json
+data/sessions/*.json
+data/shares/*.json
+
+# ===== 日志/临时 =====
+*.log
+*.tmp
+*.swp
+*.swo
+
+# ===== 系统 =====
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

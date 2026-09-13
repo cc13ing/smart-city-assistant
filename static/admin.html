@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>运行监控 · CityIntro</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    body { padding: 24px; max-width: 900px; margin: 0 auto; }
+    .metric-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin: 16px 0; }
+    .metric-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+    .metric-card strong { display: block; font-size: 1.4rem; }
+    pre { background: var(--bg-elevated); padding: 12px; border-radius: 8px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h1>CityIntro 运行监控</h1>
+  <p id="healthStatus">检查中...</p>
+  <div id="metricGrid" class="metric-grid"></div>
+  <h2>原始指标</h2>
+  <pre id="rawMetrics">加载中...</pre>
+  <script>
+    async function refresh() {
+      const healthEl = document.getElementById("healthStatus");
+      const grid = document.getElementById("metricGrid");
+      const raw = document.getElementById("rawMetrics");
+      try {
+        const [h, m] = await Promise.all([fetch("/api/health"), fetch("/api/metrics")]);
+        const health = await h.json();
+        const metrics = await m.json();
+        healthEl.textContent = `服务 ${health.status} · 运行 ${metrics.uptime_seconds}s`;
+        grid.innerHTML = "";
+        Object.entries(metrics.counters || {}).forEach(([k, v]) => {
+          const card = document.createElement("div");
+          card.className = "metric-card";
+          card.innerHTML = `<span>${k}</span><strong>${v}</strong>`;
+          grid.appendChild(card);
+        });
+        raw.textContent = JSON.stringify({ health, metrics }, null, 2);
+      } catch (e) {
+        healthEl.textContent = "加载失败";
+        raw.textContent = String(e);
+      }
+    }
+    refresh();
+    setInterval(refresh, 15000);
+  </script>
+</body>
+</html>

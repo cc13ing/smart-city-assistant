@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>分享的行程 · CityIntro</title>
+
+  <link rel="stylesheet" href="/static/style.css" />
+
+  <style>
+
+    body { display: flex; justify-content: center; padding: 24px; background: var(--bg, #0f1419); color: var(--text, #e7ecf3); }
+
+    .share-page { max-width: 720px; width: 100%; }
+
+    .share-page h1 { margin-bottom: 8px; }
+
+    .share-trip-card { background: var(--bg-elevated, #1a2332); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); }
+
+    .share-summary { opacity: 0.9; margin-bottom: 16px; line-height: 1.6; }
+
+    .share-stops { list-style: none; padding: 0; margin: 0; }
+
+    .share-stops li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+    .share-stop-order { width: 28px; height: 28px; border-radius: 50%; background: rgba(99,102,241,0.2); color: #a5b4fc; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+
+    .share-day h3 { font-size: 1rem; margin: 16px 0 8px; color: #a5b4fc; }
+
+    .share-day ul { padding-left: 1.2rem; }
+
+    .share-city-tag { display: inline-block; padding: 2px 8px; border-radius: 999px; background: rgba(99,102,241,0.15); margin-right: 8px; font-size: 0.85rem; }
+
+    .share-fallback { white-space: pre-wrap; font-size: 0.85rem; opacity: 0.8; }
+
+    #shareMeta { opacity: 0.75; margin-bottom: 16px; }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="share-page">
+
+    <h1 id="shareTitle">分享的行程</h1>
+
+    <p id="shareMeta" class="location-pill"></p>
+
+    <div id="shareContent">加载中...</div>
+
+  </div>
+
+  <script src="/static/share-page.js"></script>
+
+</body>
+
+</html>
+
+

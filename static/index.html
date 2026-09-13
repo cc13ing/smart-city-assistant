@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AutoCityIntro · 智能城市助手</title>
+  <link rel="icon" href="/favicon.ico" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div id="sidebarOverlay" class="overlay"></div>
+  <div id="mapOverlay" class="overlay"></div>
+
+  <div class="app-shell">
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>
+          <h1>CityIntro</h1>
+          <p>智能城市助手</p>
+        </div>
+      </div>
+      <button id="newChatBtn" type="button" class="btn-new-chat">
+        <span class="icon" id="newChatIcon"></span>
+        新对话
+      </button>
+      <div class="sidebar-block favorites-block">
+        <div class="sidebar-label">我的城市</div>
+        <p class="sidebar-sublabel">收藏 · 偏好 · 常去城市</p>
+        <div id="favoritesPanel" class="favorites-panel"></div>
+      </div>
+      <div class="sidebar-label">最近对话</div>
+      <ul id="sessionList" class="session-list"></ul>
+    </aside>
+
+    <div id="sidebarResize" class="resize-handle" title="拖动调整侧栏宽度" aria-hidden="true"></div>
+
+    <div class="main-column">
+      <header class="topbar">
+        <button type="button" id="sidebarToggle" class="btn-icon-only" aria-label="打开菜单">
+          <span class="icon" id="menuIcon"></span>
+        </button>
+        <div class="topbar-title">
+          <h2 id="chatTitle">新对话</h2>
+          <p id="locationPill" class="location-pill">未定位 · 点击定位以获取周边推荐</p>
+        </div>
+        <div class="topbar-actions">
+          <button type="button" id="toggleMapBtn" class="btn-icon-only" title="地图面板">
+            <span class="icon" id="mapIcon"></span>
+          </button>
+          <button type="button" id="companionBtn" class="btn-companion" title="下一站建议">
+            <span class="icon" id="compassIcon"></span>
+            下一站
+          </button>
+          <div class="menu-wrap">
+            <button type="button" id="moreMenuBtn" class="btn-icon-only" aria-label="更多">
+              <span class="icon" id="moreIcon"></span>
+            </button>
+            <div id="moreMenu" class="dropdown hidden">
+              <button type="button" id="settingsOpenBtn">设置与隐私</button>
+              <button type="button" id="clearProfileBtn">清除个性化记忆</button>
+              <button type="button" id="exportSessionBtn">导出对话 Markdown</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div id="statusBar" class="status-bar hidden">
+        <span class="status-dot"></span>
+        <span id="statusText">正在处理...</span>
+      </div>
+
+      <main id="messages" class="messages"></main>
+
+      <div id="suggestionChips" class="suggestion-chips"></div>
+
+      <footer class="composer-wrap">
+        <form id="chatForm" class="composer">
+          <div class="composer-tools">
+            <button type="button" id="locationBtn" class="tool-btn" title="定位">
+              <span class="icon" id="locIcon"></span>
+            </button>
+            <button type="button" id="voiceBtn" class="tool-btn" title="语音">
+              <span class="icon" id="micIcon"></span>
+            </button>
+            <button type="button" id="cameraBtn" class="tool-btn" title="识景">
+              <span class="icon" id="camIcon"></span>
+            </button>
+          </div>
+          <textarea
+            id="messageInput"
+            rows="1"
+            placeholder="问天气、路线、周边美食与景点，或规划半日游..."
+          ></textarea>
+          <button type="submit" id="sendBtn" class="send-btn" aria-label="发送">
+            <span class="icon" id="sendIcon"></span>
+          </button>
+        </form>
+        <p id="voiceHint" class="composer-hint"></p>
+      </footer>
+    </div>
+
+    <div id="mapResize" class="resize-handle resize-handle-map" title="拖动调整地图宽度" aria-hidden="true"></div>
+
+    <aside id="mapPanel" class="map-panel">
+      <div class="map-panel-header">
+        <div>
+          <h3 id="mapPanelTitle">地图</h3>
+          <p id="mapPanelMeta" class="map-panel-meta"></p>
+        </div>
+        <button type="button" id="mapPanelClose" class="btn-icon-only" aria-label="关闭地图">
+          <span class="icon" id="mapCloseIcon"></span>
+        </button>
+      </div>
+      <div id="mapPanelContainer" class="map-panel-container"></div>
+      <div id="mapPanelActions" class="map-panel-actions"></div>
+    </aside>
+  </div>
+
+  <div id="mapSheet" class="map-sheet">
+    <div class="sheet-handle"></div>
+    <div class="map-panel-header">
+      <div>
+        <h3 id="mapSheetTitle">地图</h3>
+        <p id="mapSheetMeta" class="map-panel-meta"></p>
+      </div>
+      <button type="button" id="mapSheetClose" class="btn-icon-only">
+        <span class="icon"></span>
+      </button>
+    </div>
+    <div id="mapSheetContainer" class="map-panel-container"></div>
+  </div>
+
+  <input type="file" id="imageInput" accept="image/*" hidden />
+
+  <div id="routePlannerOverlay" class="overlay route-planner-overlay" aria-hidden="true">
+    <div class="route-planner" role="dialog" aria-labelledby="routePlannerTitle">
+      <div class="route-planner-header">
+        <h3 id="routePlannerTitle">路线导航</h3>
+        <button type="button" id="routePlannerClose" class="btn-icon-only" aria-label="关闭">×</button>
+      </div>
+      <div class="route-planner-body">
+        <label class="route-field-label">起点</label>
+        <div id="routePlannerOrigin" class="route-origin">正在定位...</div>
+        <label class="route-field-label" for="routePlannerDest">目的地</label>
+        <input
+          id="routePlannerDest"
+          class="route-dest-input"
+          type="text"
+          placeholder="输入地址或地点，如：大雁塔、国贸商城"
+          autocomplete="off"
+        />
+        <div class="route-mode-tabs" role="tablist" aria-label="出行方式">
+          <button type="button" class="route-mode-tab active" data-mode="driving" role="tab">驾车</button>
+          <button type="button" class="route-mode-tab" data-mode="walking" role="tab">步行</button>
+          <button type="button" class="route-mode-tab" data-mode="transit" role="tab">公交/地铁</button>
+        </div>
+        <p id="routePlannerError" class="route-planner-error hidden"></p>
+      </div>
+      <div class="route-planner-footer">
+        <button type="button" id="routePlannerGo" class="route-planner-go">在高德 App 中导航</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="poiDetailOverlay" class="overlay modal-overlay">
+    <div class="poi-detail-dialog modal-dialog" role="dialog">
+      <div class="modal-header">
+        <h3>地点详情</h3>
+        <button type="button" id="poiDetailClose" class="btn-icon-only" aria-label="关闭">×</button>
+      </div>
+      <div id="poiDetailBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <div id="settingsOverlay" class="overlay modal-overlay">
+    <div class="modal-dialog settings-dialog" role="dialog">
+      <div class="modal-header">
+        <h3>设置与隐私</h3>
+        <button type="button" id="settingsCloseBtn" class="btn-icon-only">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="settingsProfile" class="settings-profile"></div>
+        <div class="settings-actions">
+          <button type="button" id="settingsExportBtn" class="btn-ghost">导出当前对话</button>
+          <button type="button" id="settingsAdminBtn" class="btn-ghost">打开运行监控</button>
+          <button type="button" id="settingsDeleteBtn" class="btn-ghost danger-text">删除我的数据</button>
+        </div>
+        <h4>隐私政策</h4>
+        <pre id="settingsPolicy" class="settings-policy"></pre>
+      </div>
+    </div>
+  </div>
+
+  <div id="shareOverlay" class="overlay modal-overlay">
+    <div class="modal-dialog" role="dialog">
+      <div class="modal-header">
+        <h3>分享行程</h3>
+        <button type="button" id="shareCloseBtn" class="btn-icon-only">×</button>
+      </div>
+      <div class="modal-body share-body">
+        <img id="shareQrImg" class="share-qr" alt="二维码" width="160" height="160" />
+        <input id="shareUrlInput" class="share-url-input" readonly />
+        <button type="button" id="shareCopyBtn" class="route-planner-go">复制链接</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/icons.js"></script>
+  <script src="/static/markdown.js"></script>
+  <script src="/static/map-route.js"></script>
+  <script src="/static/amap-uri.js"></script>
+  <script src="/static/route-planner.js"></script>
+  <script src="/static/map-panel.js"></script>
+  <script src="/static/panel-resize.js"></script>
+  <script src="/static/voice.js"></script>
+  <script src="/static/multimodal.js"></script>
+  <script src="/static/poi-detail.js"></script>
+  <script src="/static/share-panel.js"></script>
+  <script src="/static/settings-panel.js"></script>
+  <script src="/static/chat-stream.js"></script>
+  <script src="/static/feedback.js"></script>
+  <script src="/static/favorites-panel.js"></script>
+  <script src="/static/trip-card.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

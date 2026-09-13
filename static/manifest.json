@@ -1,0 +1,10 @@
+{
+  "name": "AutoCityIntro 智能城市助手",
+  "short_name": "CityIntro",
+  "description": "Agentic 多模态城市智能助手",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1419",
+  "theme_color": "#1a73e8",
+  "lang": "zh-CN"
+}
